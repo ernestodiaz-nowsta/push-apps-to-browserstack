@@ -1,0 +1,22 @@
+on:
+  # Manual trigger 
+  workflow_dispatch:
+
+  
+jobs:
+  Trigger-circle-CI-CypressE2ETests:
+    runs-on: ubuntu-latest
+    env:
+      BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_SECRET: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
+    steps:
+      - run: |
+          curl --location --request POST 'https://api-cloud.browserstack.com/app-automate/upload' --header 'Authorization: Basic $BROWSERSTACK_ACCESSKEY=' --form 'file=@"PATH/TO/APK"'
+  # Replace apk path
+  Upload-with-GHA-action:
+    name: Upload APK to BrowserStack
+    uses: shreyanshp/upload-app-browserstack@v3
+    with:
+      app-path: /path-to-apk/app.apk
+      browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME }}
+      browserstack-accesskey: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
